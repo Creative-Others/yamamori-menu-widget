@@ -1,16 +1,13 @@
 
 
 /* General Styles */
-body {
-    font-family: "Montserrat", sans-serif;
-    background-color: #000;
-    color: #fff;
-}
-
 #yammenu-widget-container {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
+    font-family: "Montserrat", sans-serif;
+    background-color: #000;
+    color: #fff;
 }
 
 /* Navigation Menu */
