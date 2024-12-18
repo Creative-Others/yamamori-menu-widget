@@ -5,13 +5,10 @@ body {
     font-family: "Montserrat", sans-serif;
     background-color: #000;
     color: #fff;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 #yammenu-widget-container {
+    text-align: center;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -90,6 +87,14 @@ body {
     font-size: 0.8rem;
     color: grey;
     padding-bottom:20px;
+}
+
+#yammenu-widget-container .subsection {
+    margin-bottom:40px;
+}
+
+#yammenu-widget-container .subsection-title {
+    color:#e63946;
 }
 
 /* Menu Items - Grid Layout */

@@ -8,12 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
         Izakaya: '1cAbC6vHIJ_anotherSpreadsheetId',
     };
 
-    // Identify the widget and extract city/meal
     const widget = document.getElementById('yammenu-widget-container');
     const city = widget.getAttribute('data-city');
     const meal = widget.getAttribute('data-meal');
 
-    // Fetch and display data for the specified city and meal
     if (city && meal && SPREADSHEET_IDS[city]) {
         const spreadsheetId = SPREADSHEET_IDS[city];
         fetchData(spreadsheetId, meal);
@@ -21,14 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error('Invalid city or meal specified in data attributes.');
     }
 
-    // Fetch menu data from the specified spreadsheet and meal tab.
     function fetchData(spreadsheetId, meal) {
-        const RANGE = `${meal}!A2:E`;
+        const RANGE = `${meal}!A2:F`; // Updated range to include the "Subsection" column
         const URL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${RANGE}?key=${API_KEY}`;
-        const menuSectionsContainer = document.querySelector('.menu-sections');
-        const menuLinksContainer = document.querySelector('.menu');
 
-        // Fetch data from Google Sheets
         fetch(URL)
             .then(response => response.json())
             .then(data => {
@@ -43,34 +37,44 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching menu data:', error));
     }
 
-    // Organize menu data into sections.
     function organizeMenuData(data) {
         const sectionsMap = {};
-
+    
         data.forEach(row => {
-            const [menuName, description, price, section, sectionDescription] = row;
-
+            const [menuName, description, price, section, sectionDescription, subsection] = row;
+    
             if (!sectionsMap[section]) {
                 sectionsMap[section] = {
-                    description: sectionDescription || '', // Fallback for missing descriptions
-                    items: []
+                    description: sectionDescription || '',
+                    subsections: {},
                 };
             }
-
-            sectionsMap[section].items.push({ menuName, description, price });
+    
+            // Use an empty string as a fallback if subsection is undefined or blank
+            const validSubsection = subsection ? subsection : '';
+    
+            if (!sectionsMap[section].subsections[validSubsection]) {
+                sectionsMap[section].subsections[validSubsection] = [];
+            }
+    
+            sectionsMap[section].subsections[validSubsection].push({
+                menuName,
+                description,
+                price,
+            });
         });
-
+    
         return sectionsMap;
     }
+    
 
-    // Dynamically update menu links.
     function updateMenuLinks(sectionsMap) {
         const menuLinksContainer = document.querySelector('.menu');
-        menuLinksContainer.innerHTML = ''; // Clear existing links
+        menuLinksContainer.innerHTML = '';
 
         Object.keys(sectionsMap).forEach((sectionKey, index) => {
-            const sectionId = sectionKey.toLowerCase().replace(/[\s\W]+/g, '-'); // Create a URL-friendly ID
-            const isActive = index === 0 ? 'active' : ''; // First link is active by default
+            const sectionId = sectionKey.toLowerCase().replace(/[\s\W]+/g, '-');
+            const isActive = index === 0 ? 'active' : '';
 
             const linkHTML = `
                 <li>
@@ -84,46 +88,59 @@ document.addEventListener("DOMContentLoaded", () => {
         attachLinkEventListeners();
     }
 
-    // Populate the menu sections dynamically.
     function populateMenuSections(sectionsMap) {
         const menuSectionsContainer = document.querySelector('.menu-sections');
-        menuSectionsContainer.innerHTML = ''; // Clear the container
-
+        menuSectionsContainer.innerHTML = '';
+    
         Object.keys(sectionsMap).forEach(sectionKey => {
             const sectionData = sectionsMap[sectionKey];
             const sectionId = sectionKey.toLowerCase().replace(/[\s\W]+/g, '-');
             const sectionDescription = sectionData.description || '';
-
+    
+            let subsectionsHTML = '';
+            Object.keys(sectionData.subsections).forEach(subsectionKey => {
+                const itemsHTML = sectionData.subsections[subsectionKey]
+                    .map(item => `
+                        <div class="item">
+                            <div>
+                                <p class="item-name">
+                                    <strong>${item.menuName}</strong><br>
+                                    <em>${item.description}</em>
+                                </p>
+                                <p class="price">${item.price}</p>
+                            </div>
+                        </div>
+                    `).join('');
+    
+                // Only display the subsection title if it is not empty
+                const subsectionTitleHTML = subsectionKey ? `<h3 class="subsection-title">${subsectionKey}</h3>` : '';
+    
+                subsectionsHTML += `
+                    <div class="subsection">
+                        ${subsectionTitleHTML}
+                        <div class="menu-items">${itemsHTML}</div>
+                    </div>
+                `;
+            });
+    
             const sectionHTML = `
                 <section id="${sectionId}" class="content-section">
                     <h2 class="menu-section">${sectionKey}</h2>
                     <p class="section-desc"><em>${sectionDescription}</em></p>
-                    <div class="menu-items">
-                        ${sectionData.items.map(item => `
-                            <div class="item">
-                                <div>
-                                    <p class="item-name">
-                                        <strong>${item.menuName}</strong><br>
-                                        <em>${item.description}</em>
-                                    </p>
-                                    <p class="price">${item.price}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
+                    ${subsectionsHTML}
                 </section>
             `;
-
+    
             menuSectionsContainer.insertAdjacentHTML('beforeend', sectionHTML);
         });
-
+    
         const firstSection = menuSectionsContainer.querySelector('.content-section');
         if (firstSection) {
             firstSection.classList.add('active');
         }
     }
+    
 
-    // Attach click event listeners to menu links.
     function attachLinkEventListeners() {
         const links = document.querySelectorAll('.menu-link');
 
@@ -139,7 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Deactivate all sections.
     function deactivateSections() {
         const sections = document.querySelectorAll('.content-section');
         sections.forEach(section => section.classList.remove('active'));
