@@ -88,11 +88,11 @@
 
 #yammenu-widget-container .subsection {
     margin-bottom:40px;
-    font-size:1.2rem;
 }
 
 #yammenu-widget-container .subsection-title {
     color:#e63946;
+    font-size:1.2rem;
 }
 
 /* Menu Items - Grid Layout */
