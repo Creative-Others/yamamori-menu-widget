@@ -11,13 +11,13 @@ body {
     justify-content: center;
 }
 
-.widget-container {
+#yammenu-widget-container {
     max-width: 800px;
     margin: 0 auto;
 }
 
 /* Navigation Menu */
-.menu {
+#yammenu-widget-container .menu {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -26,11 +26,11 @@ body {
     flex-wrap: wrap;
 }
 
-.menu li {
+#yammenu-widget-container .menu li {
     margin: 5px 10px;
 }
 
-.menu-link {
+#yammenu-widget-container .menu-link {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
@@ -38,17 +38,17 @@ body {
     transition: color 0.3s ease;
 }
 
-.menu-link:hover {
+#yammenu-widget-container .menu-link:hover {
     color: #e63946;
 }
 
-.menu-link.active {
+#yammenu-widget-container .menu-link.active {
     color: #e63946;
     border-bottom: 1px solid #e63946;
 }
 
 /* Section Titles */
-h2 {
+#yammenu-widget-container h2 {
     color: #e63946;
     margin: 0px auto;
     font-size: 1.5rem;
@@ -58,8 +58,8 @@ h2 {
     font-weight: bold;
 }
 
-h2::before,
-h2::after {
+#yammenu-widget-container h2::before,
+#yammenu-widget-container h2::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -68,32 +68,32 @@ h2::after {
     background-color: #e63946;
 }
 
-h2::before {
+#yammenu-widget-container h2::before {
     left: -60px;
 }
 
-h2::after {
+#yammenu-widget-container h2::after {
     right: -60px;
 }
 
 /* Content Sections */
-.content-section {
+#yammenu-widget-container .content-section {
     display: none;
     padding: 20px;
 }
 
-.content-section.active {
+#yammenu-widget-container .content-section.active {
     display: block;
 }
 
-.section-desc {
+#yammenu-widget-container .section-desc {
     font-size: 0.8rem;
     color: grey;
     padding-bottom:20px;
 }
 
 /* Menu Items - Grid Layout */
-.menu-items {
+#yammenu-widget-container .menu-items {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 50px;
@@ -101,40 +101,40 @@ h2::after {
     margin-top: 20px;
 }
 
-.item {
+#yammenu-widget-container .item {
     width:100%;
 }
 
-.item em {
+#yammenu-widget-container .item em {
     color: grey;
     font-size: 0.8rem;
 }
 
-.item div {
+#yammenu-widget-container .item div {
     display:flex;
     justify-content:space-between;
     margin-bottom:0px;
     text-align:left;
 }
 
-.item p {
+#yammenu-widget-container .item p {
     margin:2px;
 }
 
-.item .price {
+#yammenu-widget-container .item .price {
     margin-left:20px;
 }
 
 
 /* Responsive Behavior */
 @media (max-width: 768px) {
-    .menu-items {
+    #yammenu-widget-container .menu-items {
         grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
     }
 }
 
 @media (max-width: 480px) {
-    .menu-items {
+    #yammenu-widget-container .menu-items {
         grid-template-columns: 1fr; /* 1 column on very small screens */
     }
 }
