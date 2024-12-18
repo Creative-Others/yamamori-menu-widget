@@ -104,11 +104,6 @@
     margin-top: 20px;
 }
 
-#yammenu-widget-container .menu-items:after {
-    content: "";
-    flex: 0 1 calc(33.333% - 30px); /* Dummy item to align lone items */
-}
-
 #yammenu-widget-container .item {
     flex: 0 1 calc(33.333% - 30px);
     max-width: 300px;
