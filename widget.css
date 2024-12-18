@@ -28,7 +28,7 @@
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: color 0.3s ease;
 }
 
@@ -45,7 +45,7 @@
 #yammenu-widget-container h2 {
     color: #e63946;
     margin: 0px auto;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     position: relative;
     display: inline-block;
     text-transform: uppercase;
@@ -81,7 +81,7 @@
 }
 
 #yammenu-widget-container .section-desc {
-    font-size: 0.8rem;
+    font-size: 1.0rem;
     color: grey;
     padding-bottom:20px;
 }
@@ -109,7 +109,7 @@
 
 #yammenu-widget-container .item em {
     color: grey;
-    font-size: 0.8rem;
+    font-size: 1.0rem;
 }
 
 #yammenu-widget-container .item div {
