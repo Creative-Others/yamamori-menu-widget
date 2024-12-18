@@ -1,0 +1,140 @@
+
+
+/* General Styles */
+body {
+    font-family: "Montserrat", sans-serif;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.widget-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Navigation Menu */
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.menu li {
+    margin: 5px 10px;
+}
+
+.menu-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.menu-link:hover {
+    color: #e63946;
+}
+
+.menu-link.active {
+    color: #e63946;
+    border-bottom: 1px solid #e63946;
+}
+
+/* Section Titles */
+h2 {
+    color: #e63946;
+    margin: 0px auto;
+    font-size: 1.5rem;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+h2::before,
+h2::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 1px;
+    background-color: #e63946;
+}
+
+h2::before {
+    left: -60px;
+}
+
+h2::after {
+    right: -60px;
+}
+
+/* Content Sections */
+.content-section {
+    display: none;
+    padding: 20px;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.section-desc {
+    font-size: 0.8rem;
+    color: grey;
+    padding-bottom:20px;
+}
+
+/* Menu Items - Grid Layout */
+.menu-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+    justify-items: center;
+    margin-top: 20px;
+}
+
+.item {
+    width:100%;
+}
+
+.item em {
+    color: grey;
+    font-size: 0.8rem;
+}
+
+.item div {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:0px;
+    text-align:left;
+}
+
+.item p {
+    margin:2px;
+}
+
+.item .price {
+    margin-left:20px;
+}
+
+
+/* Responsive Behavior */
+@media (max-width: 768px) {
+    .menu-items {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-items {
+        grid-template-columns: 1fr; /* 1 column on very small screens */
+    }
+}
