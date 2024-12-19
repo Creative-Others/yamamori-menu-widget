@@ -8,18 +8,22 @@ document.addEventListener("DOMContentLoaded", () => {
         Izakaya: '1cAbC6vHIJ_anotherSpreadsheetId',
     };
 
-    const widget = document.getElementById('yammenu-widget-container');
-    const city = widget.getAttribute('data-city');
-    const meal = widget.getAttribute('data-meal');
+    // Select all widget containers
+    const widgets = document.querySelectorAll('.yammenu-widget-container');
 
-    if (city && meal && SPREADSHEET_IDS[city]) {
-        const spreadsheetId = SPREADSHEET_IDS[city];
-        fetchData(spreadsheetId, meal);
-    } else {
-        console.error('Invalid city or meal specified in data attributes.');
-    }
+    widgets.forEach(widget => {
+        const city = widget.getAttribute('data-city');
+        const meal = widget.getAttribute('data-meal');
 
-    function fetchData(spreadsheetId, meal) {
+        if (city && meal && SPREADSHEET_IDS[city]) {
+            const spreadsheetId = SPREADSHEET_IDS[city];
+            fetchData(spreadsheetId, meal, widget);
+        } else {
+            console.error('Invalid city or meal specified in data attributes for widget:', widget);
+        }
+    });
+
+    function fetchData(spreadsheetId, meal, widget) {
         const RANGE = `${meal}!A2:F`; // Updated range to include the "Subsection" column
         const URL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${RANGE}?key=${API_KEY}`;
 
@@ -28,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(data => {
                 if (data.values) {
                     const sectionsMap = organizeMenuData(data.values);
-                    updateMenuLinks(sectionsMap);
-                    populateMenuSections(sectionsMap);
+                    updateMenuLinks(sectionsMap, widget);
+                    populateMenuSections(sectionsMap, widget);
                 } else {
                     console.error('No data found for the specified meal and spreadsheet.');
                 }
@@ -39,37 +43,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function organizeMenuData(data) {
         const sectionsMap = {};
-    
+
         data.forEach(row => {
             const [menuName, description, price, section, sectionDescription, subsection] = row;
-    
+
             if (!sectionsMap[section]) {
                 sectionsMap[section] = {
                     description: sectionDescription || '',
                     subsections: {},
                 };
             }
-    
-            // Use an empty string as a fallback if subsection is undefined or blank
+
             const validSubsection = subsection ? subsection : '';
-    
+
             if (!sectionsMap[section].subsections[validSubsection]) {
                 sectionsMap[section].subsections[validSubsection] = [];
             }
-    
+
             sectionsMap[section].subsections[validSubsection].push({
                 menuName,
                 description,
                 price,
             });
         });
-    
+
         return sectionsMap;
     }
-    
 
-    function updateMenuLinks(sectionsMap) {
-        const menuLinksContainer = document.querySelector('.menu');
+    function updateMenuLinks(sectionsMap, widget) {
+        const menuLinksContainer = widget.querySelector('.menu');
         menuLinksContainer.innerHTML = '';
 
         Object.keys(sectionsMap).forEach((sectionKey, index) => {
@@ -85,18 +87,18 @@ document.addEventListener("DOMContentLoaded", () => {
             menuLinksContainer.insertAdjacentHTML('beforeend', linkHTML);
         });
 
-        attachLinkEventListeners();
+        attachLinkEventListeners(widget);
     }
 
-    function populateMenuSections(sectionsMap) {
-        const menuSectionsContainer = document.querySelector('.menu-sections');
+    function populateMenuSections(sectionsMap, widget) {
+        const menuSectionsContainer = widget.querySelector('.menu-sections');
         menuSectionsContainer.innerHTML = '';
-    
+
         Object.keys(sectionsMap).forEach(sectionKey => {
             const sectionData = sectionsMap[sectionKey];
             const sectionId = sectionKey.toLowerCase().replace(/[\s\W]+/g, '-');
             const sectionDescription = sectionData.description || '';
-    
+
             let subsectionsHTML = '';
             Object.keys(sectionData.subsections).forEach(subsectionKey => {
                 const itemsHTML = sectionData.subsections[subsectionKey]
@@ -111,10 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                         </div>
                     `).join('');
-    
-                // Only display the subsection title if it is not empty
+
                 const subsectionTitleHTML = subsectionKey ? `<h3 class="subsection-title">${subsectionKey}</h3>` : '';
-    
+
                 subsectionsHTML += `
                     <div class="subsection">
                         ${subsectionTitleHTML}
@@ -122,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
             });
-    
+
             const sectionHTML = `
                 <section id="${sectionId}" class="content-section">
                     <h2 class="menu-section">${sectionKey}</h2>
@@ -130,34 +131,33 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${subsectionsHTML}
                 </section>
             `;
-    
+
             menuSectionsContainer.insertAdjacentHTML('beforeend', sectionHTML);
         });
-    
+
         const firstSection = menuSectionsContainer.querySelector('.content-section');
         if (firstSection) {
             firstSection.classList.add('active');
         }
     }
-    
 
-    function attachLinkEventListeners() {
-        const links = document.querySelectorAll('.menu-link');
+    function attachLinkEventListeners(widget) {
+        const links = widget.querySelectorAll('.menu-link');
 
         links.forEach(link => {
             link.addEventListener('click', (event) => {
                 event.preventDefault();
                 const targetId = link.getAttribute('href').substring(1);
-                deactivateSections();
-                document.getElementById(targetId).classList.add('active');
+                deactivateSections(widget);
+                widget.querySelector(`#${targetId}`).classList.add('active');
                 links.forEach(link => link.classList.remove('active'));
                 link.classList.add('active');
             });
         });
     }
 
-    function deactivateSections() {
-        const sections = document.querySelectorAll('.content-section');
+    function deactivateSections(widget) {
+        const sections = widget.querySelectorAll('.content-section');
         sections.forEach(section => section.classList.remove('active'));
     }
 });
