@@ -19,7 +19,7 @@
 }
 
 .yammenu-widget-container .menu li {
-    margin: 5px 10px;
+    margin: 5px 10px !important;
 }
 
 .yammenu-widget-container .menu-link {
@@ -72,6 +72,7 @@
 .yammenu-widget-container .content-section {
     display: none;
     padding: 20px;
+    padding-top:60px;
 }
 
 .yammenu-widget-container .content-section.active {
