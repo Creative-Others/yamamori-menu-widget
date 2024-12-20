@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const linkHTML = `
                 <li>
-                    <a href="#${sectionId}" class="menu-link ${isActive}">${sectionKey}</a>
+                    <a href="#${sectionId}" class="menu-link ${isActive}">${sectionKey.toLocaleUpperCase()}</a>
                 </li>
             `;
 
