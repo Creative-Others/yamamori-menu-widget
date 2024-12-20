@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Spreadsheet IDs for each location
     const SPREADSHEET_IDS = {
         NorthCity: '1vyo2X6vHY_az1U0IQWjr0k3cvJz9v3fxxwG3lYThdrU',
-        SouthCity: '1bXyZ6vXYZ_someOtherSpreadsheetId',
-        Izakaya: '1cAbC6vHIJ_anotherSpreadsheetId',
+        SouthCity: '1zJ_LOX5cW_FYKu0YOJzSZa48HBrEYVbg0CwGWCQZJQ4',
+        Izakaya: '1aovcVzI-HPTOlPOcAsuito01X3pVqtG0hphXdibQtdY',
     };
 
     // Select all widget containers
